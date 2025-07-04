@@ -7,7 +7,10 @@
       "teamMembers": "/teams/members",
       "dailyUsage": "/teams/daily-usage-data",
       "usageEvents": "/teams/usage-events",
-      "spendingReport": "/teams/spending-report"
+      "spendingReport": "/teams/spending-report",
+      "functions": "/functions",
+      "functionExecutions": "/functions/executions",
+      "functionMetrics": "/functions/metrics"
     },
     "monitoring": {
       "dailyReports": {
@@ -23,7 +26,11 @@
           "composerRequests",
           "chatRequests",
           "agentRequests",
-          "mostUsedModel"
+          "mostUsedModel",
+          "functionsCreated",
+          "functionsExecuted",
+          "functionExecutionTime",
+          "functionErrors"
         ]
       },
       "alerts": {
@@ -61,6 +68,20 @@
             "title": "Team Productivity",
             "metrics": ["acceptedLinesAdded", "totalLinesAdded"],
             "calculation": "acceptance_rate"
+          },
+          {
+            "type": "function-usage",
+            "title": "Function Usage Statistics",
+            "metrics": ["functionsExecuted", "functionErrors"],
+            "chartType": "line",
+            "timeRange": "30d"
+          },
+          {
+            "type": "function-performance",
+            "title": "Function Performance",
+            "metrics": ["functionExecutionTime"],
+            "chartType": "histogram",
+            "aggregation": "avg"
           }
         ]
       },
@@ -92,12 +113,16 @@
         "perUser": {
           "dailyRequests": 100,
           "weeklyAgentHours": 10,
-          "monthlySpending": 50
+          "monthlySpending": 50,
+          "functionsPerDay": 20,
+          "functionExecutionTime": "5m"
         },
         "perTeam": {
           "dailyRequests": 1000,
           "weeklyAgentHours": 100,
-          "monthlySpending": 500
+          "monthlySpending": 500,
+          "functionsPerDay": 200,
+          "functionExecutionTime": "60m"
         }
       }
     }

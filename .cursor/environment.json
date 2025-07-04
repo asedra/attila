@@ -6,12 +6,17 @@
     { "name": "Lint", "command": "npm run lint" },
     { "name": "Type Check", "command": "npm run type-check" },
     { "name": "Build", "command": "npm run build" },
-    { "name": "E2E Tests", "command": "npm run test:e2e" }
+    { "name": "E2E Tests", "command": "npm run test:e2e" },
+    { "name": "Function Tests", "command": "cd backend && python -m pytest app/tests/test_functions.py -v" },
+    { "name": "Backend Dev", "command": "cd backend && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000" }
   ],
   "environment": {
     "NODE_ENV": "development",
     "DEBUG": "true",
-    "CI": "true"
+    "CI": "true",
+    "FUNCTION_EXECUTION_TIMEOUT": "30",
+    "FUNCTION_MEMORY_LIMIT": "512MB",
+    "FUNCTION_SANDBOX_ENABLED": "true"
   },
   "snapshot": {
     "enabled": false,

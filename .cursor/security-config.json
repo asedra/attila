@@ -63,7 +63,24 @@
         "codebaseAccess": "role_based",
         "mcpServers": "admin_approved",
         "backgroundAgents": "team_lead_approved",
-        "adminApi": "admin_only"
+        "adminApi": "admin_only",
+        "functionManagement": {
+          "create": ["admin", "team_lead", "developer"],
+          "execute": ["admin", "team_lead", "developer"],
+          "update": ["admin", "team_lead"],
+          "delete": ["admin", "team_lead"],
+          "view": ["admin", "team_lead", "developer", "viewer"]
+        },
+        "functionExecution": {
+          "timeoutLimit": "30s",
+          "memoryLimit": "512MB",
+          "rateLimiting": {
+            "perUser": "50/hour",
+            "perFunction": "100/hour"
+          },
+          "sandboxed": true,
+          "allowedModules": ["requests", "json", "datetime", "re"]
+        }
       }
     },
     "auditLogging": {

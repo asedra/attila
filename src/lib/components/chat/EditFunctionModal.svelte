@@ -5,13 +5,15 @@
   const dispatch = createEventDispatcher();
   
   export let isOpen = false;
+  export let functionToEdit = null;
   
   let formData = {
     name: '',
     description: '',
     icon: 'gear',
     category: 'custom',
-    parameters: []
+    parameters: [],
+    isEnabled: true
   };
   
   let newParameter = {
@@ -23,6 +25,18 @@
   
   let isSubmitting = false;
   let error = null;
+  
+  // Watch for function changes and update form
+  $: if (functionToEdit) {
+    formData = {
+      name: functionToEdit.name || '',
+      description: functionToEdit.description || '',
+      icon: functionToEdit.icon || 'gear',
+      category: functionToEdit.category || 'custom',
+      parameters: functionToEdit.parameters ? [...functionToEdit.parameters] : [],
+      isEnabled: functionToEdit.isEnabled !== undefined ? functionToEdit.isEnabled : true
+    };
+  }
   
   const iconOptions = [
     { value: 'gear', label: '⚙️ Gear', icon: '⚙️' },
@@ -72,9 +86,20 @@
     formData.parameters = formData.parameters.filter((_, i) => i !== index);
   }
   
+  function editParameter(index) {
+    const param = formData.parameters[index];
+    newParameter = { ...param };
+    removeParameter(index);
+  }
+  
   async function handleSubmit() {
     if (!formData.name.trim()) {
       error = 'Function name is required';
+      return;
+    }
+    
+    if (!functionToEdit?.id) {
+      error = 'Function ID is missing';
       return;
     }
     
@@ -82,18 +107,9 @@
     error = null;
     
     try {
-      await functionsActions.createFunction(formData);
+      await functionsActions.updateFunction(functionToEdit.id, formData);
       
-      // Reset form
-      formData = {
-        name: '',
-        description: '',
-        icon: 'gear',
-        category: 'custom',
-        parameters: []
-      };
-      
-      dispatch('created');
+      dispatch('updated');
       close();
       
     } catch (err) {
@@ -106,6 +122,21 @@
   function close() {
     isOpen = false;
     error = null;
+    // Reset form
+    formData = {
+      name: '',
+      description: '',
+      icon: 'gear',
+      category: 'custom',
+      parameters: [],
+      isEnabled: true
+    };
+    newParameter = {
+      name: '',
+      type: 'string',
+      description: '',
+      required: false
+    };
     dispatch('close');
   }
   
@@ -123,7 +154,7 @@
     <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
       <!-- Header -->
       <div class="flex items-center justify-between p-6 border-b border-gray-200">
-        <h2 class="text-xl font-semibold text-attila-dark">Create New Function</h2>
+        <h2 class="text-xl font-semibold text-attila-dark">Edit Function</h2>
         <button
           type="button"
           on:click={close}
@@ -153,14 +184,14 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Name -->
           <div>
-            <label for="name" class="block text-sm font-medium text-attila-dark mb-2">
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
               Function Name *
             </label>
             <input
               id="name"
               type="text"
               bind:value={formData.name}
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="e.g., Send Email"
               required
             />
@@ -168,13 +199,13 @@
           
           <!-- Category -->
           <div>
-            <label for="category" class="block text-sm font-medium text-attila-dark mb-2">
+            <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
               Category
             </label>
             <select
               id="category"
               bind:value={formData.category}
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {#each categoryOptions as category}
                 <option value={category}>{category}</option>
@@ -185,26 +216,26 @@
         
         <!-- Description -->
         <div>
-          <label for="description" class="block text-sm font-medium text-attila-dark mb-2">
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
             Description
           </label>
           <textarea
             id="description"
             bind:value={formData.description}
             rows="3"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Describe what this function does..."
           ></textarea>
         </div>
         
         <!-- Icon -->
         <div>
-          <label class="block text-sm font-medium text-attila-dark mb-2">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
             Icon
           </label>
           <div class="grid grid-cols-5 gap-2">
             {#each iconOptions as option}
-              <label class="flex flex-col items-center p-3 border border-gray-200 rounded-md cursor-pointer hover:bg-attila-light transition-colors {formData.icon === option.value ? 'bg-attila-primary/10 border-attila-primary' : ''}">
+              <label class="flex flex-col items-center p-3 border border-gray-200 rounded-md cursor-pointer hover:bg-gray-50 transition-colors {formData.icon === option.value ? 'bg-blue-50 border-blue-500' : ''}">
                 <input
                   type="radio"
                   bind:group={formData.icon}
@@ -212,15 +243,27 @@
                   class="sr-only"
                 />
                 <span class="text-2xl mb-1">{option.icon}</span>
-                <span class="text-xs text-attila-gray">{option.value}</span>
+                <span class="text-xs text-gray-600">{option.value}</span>
               </label>
             {/each}
           </div>
         </div>
         
+        <!-- Status -->
+        <div>
+          <label class="flex items-center">
+            <input
+              type="checkbox"
+              bind:checked={formData.isEnabled}
+              class="mr-2"
+            />
+            <span class="text-sm text-gray-700">Function enabled</span>
+          </label>
+        </div>
+        
         <!-- Parameters -->
         <div>
-          <label class="block text-sm font-medium text-attila-dark mb-2">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
             Parameters
           </label>
           
@@ -228,28 +271,41 @@
           {#if formData.parameters.length > 0}
             <div class="space-y-2 mb-4">
               {#each formData.parameters as param, index}
-                <div class="flex items-center justify-between p-3 bg-attila-light rounded-md">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-md">
                   <div class="flex-1">
                     <div class="flex items-center space-x-2">
                       <span class="font-medium">{param.name}</span>
-                      <span class="text-sm text-attila-gray">({param.type})</span>
+                      <span class="text-sm text-gray-500">({param.type})</span>
                       {#if param.required}
                         <span class="text-xs bg-red-100 text-red-800 px-1 rounded">required</span>
                       {/if}
                     </div>
                     {#if param.description}
-                      <p class="text-sm text-attila-gray mt-1">{param.description}</p>
+                      <p class="text-sm text-gray-600 mt-1">{param.description}</p>
                     {/if}
                   </div>
-                  <button
-                    type="button"
-                    on:click={() => removeParameter(index)}
-                    class="text-red-500 hover:text-red-700 transition-colors"
-                  >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                    </svg>
-                  </button>
+                  <div class="flex items-center space-x-2">
+                    <button
+                      type="button"
+                      on:click={() => editParameter(index)}
+                      class="text-blue-500 hover:text-blue-700 transition-colors"
+                      title="Edit parameter"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      on:click={() => removeParameter(index)}
+                      class="text-red-500 hover:text-red-700 transition-colors"
+                      title="Remove parameter"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               {/each}
             </div>
@@ -257,17 +313,17 @@
           
           <!-- Add Parameter Form -->
           <div class="border border-gray-200 rounded-md p-4">
-            <h4 class="text-sm font-medium text-attila-dark mb-3">Add Parameter</h4>
+            <h4 class="text-sm font-medium text-gray-700 mb-3">Add Parameter</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
               <input
                 type="text"
                 bind:value={newParameter.name}
                 placeholder="Parameter name"
-                class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent text-sm"
+                class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
               <select
                 bind:value={newParameter.type}
-                class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent text-sm"
+                class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
                 {#each parameterTypes as type}
                   <option value={type}>{type}</option>
@@ -279,7 +335,7 @@
                 type="text"
                 bind:value={newParameter.description}
                 placeholder="Parameter description (optional)"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent text-sm"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
             <div class="flex items-center justify-between">
@@ -289,13 +345,13 @@
                   bind:checked={newParameter.required}
                   class="mr-2"
                 />
-                <span class="text-sm text-attila-dark">Required parameter</span>
+                <span class="text-sm text-gray-700">Required parameter</span>
               </label>
               <button
                 type="button"
                 on:click={addParameter}
                 disabled={!newParameter.name.trim()}
-                class="px-3 py-1 bg-attila-primary text-white rounded-md hover:bg-attila-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
+                class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
               >
                 Add
               </button>
@@ -318,9 +374,9 @@
             class="px-4 py-2 bg-attila-primary text-white rounded-md hover:bg-attila-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {#if isSubmitting}
-              Creating...
+              Updating...
             {:else}
-              Create Function
+              Update Function
             {/if}
           </button>
         </div>

@@ -1,0 +1,69 @@
+# Function Management Rules
+
+## Function Creation Standards
+- All functions must have clear descriptions and purpose documentation
+- Functions should follow single responsibility principle
+- Use type hints for all function parameters and return values
+- Include comprehensive error handling and logging
+- Validate all input parameters before execution
+- Functions must be testable and include unit tests
+
+## Function Security
+- All function executions run in sandboxed environment
+- Memory and execution time limits are enforced
+- Only approved modules can be imported
+- Input sanitization is mandatory for all user data
+- Log all function executions for audit purposes
+- Never expose sensitive data in function outputs
+
+## Function Deployment
+- Use staging environment for function testing
+- Require code review for all function changes
+- Version control all function definitions
+- Implement rollback procedures for failed deployments
+- Monitor function performance after deployment
+- Document breaking changes and migration paths
+
+## Function Monitoring
+- Track execution times and resource usage
+- Monitor error rates and failure patterns
+- Set up alerts for performance degradation
+- Generate usage reports for optimization
+- Implement health checks for critical functions
+- Create dashboards for function analytics
+
+## Function Documentation
+- Document function purpose and use cases
+- Provide example inputs and expected outputs
+- Include performance characteristics and limitations
+- Document dependencies and requirements
+- Create troubleshooting guides
+- Maintain changelog for function updates
+
+## Function Lifecycle Management
+- Regular review of function usage and performance
+- Archive unused or deprecated functions
+- Update functions to use latest best practices
+- Migrate functions to newer runtime versions
+- Implement automated testing in CI/CD pipeline
+- Plan capacity and scaling requirements
+
+## Integration Guidelines
+- Use consistent naming conventions
+- Implement proper error propagation
+- Follow API design principles
+- Use appropriate HTTP status codes
+- Implement rate limiting and throttling
+- Ensure backward compatibility when updating
+
+## Quality Assurance
+- Code coverage must be above 80% for all functions
+- Performance benchmarks must be established
+- Security scanning for all function code
+- Load testing for high-usage functions
+- Regular dependency updates and vulnerability checks
+- Compliance with company coding standards
+description: Rules and guidelines for creating, managing, and maintaining custom functions in the system
+globs: ["backend/app/api/functions.py", "backend/app/models/function.py", "backend/app/services/function_database_service.py"]
+alwaysApply: true
+---

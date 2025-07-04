@@ -2,15 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Attila AI Theme */
+:root {
+  --attila-primary: #22D3EE;
+  --attila-secondary: #F59E0B;
+  --attila-dark: #1F2937;
+  --attila-darker: #111827;
+  --attila-light: #F9FAFB;
+  --attila-gray: #6B7280;
+}
+
 /* Custom styles */
 .chat-message {
   @apply rounded-lg p-4 mb-4 max-w-4xl;
 }
 
 .function-card {
-  @apply bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow;
+  @apply bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-all;
 }
 
-.function-button {
-  @apply bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors;
+.function-card:hover {
+  border-color: var(--attila-primary);
+}
+
+.function-card.active {
+  border-color: var(--attila-primary);
+  background-color: rgba(34, 211, 238, 0.05);
+}
+
+.attila-button {
+  @apply bg-attila-primary hover:bg-attila-primary/90 text-white px-4 py-2 rounded-md transition-colors;
+}
+
+.attila-button-secondary {
+  @apply bg-attila-secondary hover:bg-attila-secondary/90 text-white px-4 py-2 rounded-md transition-colors;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--attila-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--attila-gray);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--attila-primary);
 } 

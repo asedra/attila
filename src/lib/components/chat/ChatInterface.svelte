@@ -123,7 +123,7 @@
         <button
           type="button"
           on:click={() => setActiveTab('functions')}
-          class="py-3 px-1 border-b-2 font-medium text-sm transition-colors {activeTab === 'functions' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"
+          class="py-3 px-1 border-b-2 font-medium text-sm transition-colors {activeTab === 'functions' ? 'border-attila-primary text-attila-primary' : 'border-transparent text-attila-gray hover:text-attila-dark hover:border-attila-primary/30'}"
           aria-current={activeTab === 'functions' ? 'page' : undefined}
         >
           <div class="flex items-center space-x-2">
@@ -133,7 +133,7 @@
             <span>Functions</span>
           </div>
           {#if $functionsStore.activeFunctions.length > 0}
-            <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-attila-primary/10 text-attila-primary">
               {$functionsStore.activeFunctions.length}
             </span>
           {/if}
@@ -142,7 +142,7 @@
         <button
           type="button"
           on:click={() => setActiveTab('history')}
-          class="py-3 px-1 border-b-2 font-medium text-sm transition-colors {activeTab === 'history' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}"
+          class="py-3 px-1 border-b-2 font-medium text-sm transition-colors {activeTab === 'history' ? 'border-attila-primary text-attila-primary' : 'border-transparent text-attila-gray hover:text-attila-dark hover:border-attila-primary/30'}"
           aria-current={activeTab === 'history' ? 'page' : undefined}
         >
           <div class="flex items-center space-x-2">
@@ -171,19 +171,33 @@
     <div class="border-b border-gray-200 bg-white px-6 py-4 flex-shrink-0">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">
-          <h1 class="text-xl font-semibold text-gray-900">Attila AI Assistant</h1>
+          <!-- Logo -->
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-attila-dark rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-attila-secondary" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7v10c0 5.55 3.84 9.739 9 11 5.16-1.261 9-5.45 9-11V7l-10-5z"/>
+                <path d="M8 11l2 2 4-4" stroke="white" stroke-width="2" fill="none"/>
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-attila-dark">
+                ATTILA <span class="text-attila-primary">AI</span>
+              </h1>
+              <p class="text-xs text-attila-gray">Assistant</p>
+            </div>
+          </div>
           
           <!-- Current Session Info -->
           {#if $chatStore.currentSessionId}
-            <div class="flex items-center space-x-2 text-sm text-gray-600">
-              <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            <div class="flex items-center space-x-2 text-sm text-attila-gray">
+              <div class="w-2 h-2 bg-attila-primary rounded-full"></div>
               <span>
                 {$chatStore.sessions.find(s => s.id === $chatStore.currentSessionId)?.title || 'Active Session'}
               </span>
             </div>
           {:else if $chatStore.isPendingNewChat}
-            <div class="flex items-center space-x-2 text-sm text-gray-600">
-              <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+            <div class="flex items-center space-x-2 text-sm text-attila-gray">
+              <div class="w-2 h-2 bg-attila-secondary rounded-full animate-pulse"></div>
               <span>New Chat - Start typing...</span>
             </div>
           {/if}
@@ -192,8 +206,8 @@
         <div class="flex items-center space-x-4">
           <!-- Connection Status -->
           <div class="flex items-center space-x-2">
-            <div class="w-2 h-2 rounded-full {isConnected ? 'bg-green-500' : 'bg-red-500'}"></div>
-            <span class="text-sm text-gray-600">
+            <div class="w-2 h-2 rounded-full {isConnected ? 'bg-attila-primary' : 'bg-red-500'}"></div>
+            <span class="text-sm text-attila-gray">
               {isConnected ? 'Connected' : 'Disconnected'}
             </span>
           </div>
@@ -202,7 +216,7 @@
           <button
             type="button"
             on:click={openSettings}
-            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-attila-gray bg-white hover:bg-attila-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-attila-primary"
             title="OpenAI Settings"
           >
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -220,11 +234,11 @@
       {#if $chatStore.currentSessionId}
         <MessageList />
       {:else}
-        <div class="flex items-center justify-center h-full text-gray-500">
+        <div class="flex items-center justify-center h-full text-attila-gray">
           <div class="text-center">
-            <div class="text-6xl mb-4">💬</div>
-            <h3 class="text-lg font-medium mb-2">Welcome to Attila AI</h3>
-            <p class="text-sm">
+            <div class="text-6xl mb-4">⚔️</div>
+            <h3 class="text-lg font-medium mb-2 text-attila-dark">Welcome to Attila AI</h3>
+            <p class="text-sm text-attila-gray">
               {#if $chatStore.isPendingNewChat}
                 Type your message below to start a new conversation.
               {:else}

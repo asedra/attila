@@ -1,12 +1,15 @@
 <script>
   import { functionsStore, functionsActions } from '$lib/stores/functionsStore.js';
   import CreateFunctionModal from './CreateFunctionModal.svelte';
+  import EditFunctionModal from './EditFunctionModal.svelte';
   import { onMount } from 'svelte';
   
   let selectedCategory = 'all';
   let searchQuery = '';
   let showCreateModal = false;
+  let showEditModal = false;
   let showConfirmDelete = null;
+  let functionToEdit = null;
   
   onMount(() => {
     functionsActions.loadFunctions();
@@ -75,17 +78,28 @@
       console.error('Failed to toggle function:', error);
     }
   }
+
+  function openEditModal(func) {
+    functionToEdit = func;
+    showEditModal = true;
+  }
+
+  function handleFunctionUpdated() {
+    // Function successfully updated, modal will close automatically
+    functionsActions.clearError();
+    functionToEdit = null;
+  }
 </script>
 
 <div class="h-full flex flex-col">
   <!-- Header -->
   <div class="border-b border-gray-200 p-4">
     <div class="flex items-center justify-between mb-3">
-      <h2 class="text-lg font-semibold text-gray-900">Functions</h2>
+      <h2 class="text-lg font-semibold text-attila-dark">Functions</h2>
       <button
         type="button"
         on:click={openCreateModal}
-        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-attila-primary border border-attila-primary rounded-md hover:bg-attila-primary/90 transition-colors"
       >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -100,9 +114,9 @@
         type="text"
         bind:value={searchQuery}
         placeholder="Search functions..."
-        class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+        class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent text-sm"
       />
-      <svg class="absolute left-2 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="absolute left-2 top-2.5 h-4 w-4 text-attila-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
       </svg>
     </div>
@@ -134,7 +148,7 @@
     <div class="flex flex-wrap gap-2">
       <button
         type="button"
-        class="px-3 py-1 text-sm rounded-full transition-colors {selectedCategory === 'all' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+        class="px-3 py-1 text-sm rounded-full transition-colors {selectedCategory === 'all' ? 'bg-attila-primary/10 text-attila-primary' : 'bg-gray-100 text-attila-gray hover:bg-attila-primary/5'}"
         on:click={() => selectedCategory = 'all'}
       >
         All
@@ -142,7 +156,7 @@
       {#each $functionsStore.categories as category}
         <button
           type="button"
-          class="px-3 py-1 text-sm rounded-full transition-colors capitalize {selectedCategory === category ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+          class="px-3 py-1 text-sm rounded-full transition-colors capitalize {selectedCategory === category ? 'bg-attila-primary/10 text-attila-primary' : 'bg-gray-100 text-attila-gray hover:bg-attila-primary/5'}"
           on:click={() => selectedCategory = category}
         >
           {category}
@@ -155,12 +169,12 @@
   <div class="flex-1 overflow-y-auto p-4 space-y-3">
     {#if $functionsStore.isLoading}
       <div class="text-center py-8">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-        <p class="text-sm text-gray-500">Loading functions...</p>
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-attila-primary mx-auto mb-2"></div>
+        <p class="text-sm text-attila-gray">Loading functions...</p>
       </div>
     {:else}
       {#each filteredFunctions as func (func.id)}
-        <div class="function-card border-l-4 {$functionsStore.activeFunctions.includes(func.id) ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}">
+        <div class="function-card {$functionsStore.activeFunctions.includes(func.id) ? 'active' : ''}">
           <div class="flex items-start justify-between">
             <div class="flex items-start space-x-3 flex-1">
               <div class="text-2xl">
@@ -168,17 +182,17 @@
               </div>
               <div class="flex-1">
                 <div class="flex items-center space-x-2">
-                  <h3 class="text-sm font-medium text-gray-900">{func.name}</h3>
+                  <h3 class="text-sm font-medium text-attila-dark">{func.name}</h3>
                   <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {getCategoryColor(func.category)}">
                     {func.category}
                   </span>
                   {#if func.isSystem}
-                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-gray-100 text-attila-gray">
                       System
                     </span>
                   {/if}
                 </div>
-                <p class="text-xs text-gray-600 mt-1">{func.description || 'No description'}</p>
+                <p class="text-xs text-attila-gray mt-1">{func.description || 'No description'}</p>
                 
                 {#if func.parameters && func.parameters.length > 0}
                   <div class="mt-2">
@@ -202,7 +216,7 @@
               <!-- Activate Button -->
               <button
                 type="button"
-                class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium transition-colors {$functionsStore.activeFunctions.includes(func.id) ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
+                class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium transition-colors {$functionsStore.activeFunctions.includes(func.id) ? 'bg-attila-primary text-white' : 'bg-gray-200 text-attila-gray hover:bg-attila-primary/10'}"
                 on:click={() => toggleFunction(func.id)}
               >
                 {$functionsStore.activeFunctions.includes(func.id) ? 'Active' : 'Activate'}
@@ -219,6 +233,20 @@
                 >
                   <div class="w-2 h-2 rounded-full {func.isEnabled ? 'bg-green-500' : 'bg-gray-400'}"></div>
                 </button>
+                
+                <!-- Edit Button (only for non-system functions) -->
+                {#if !func.isSystem}
+                  <button
+                    type="button"
+                    on:click={() => openEditModal(func)}
+                    class="p-1 text-gray-400 hover:text-blue-600 rounded"
+                    title="Edit function"
+                  >
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                  </button>
+                {/if}
                 
                 <!-- Delete Button (only for non-system functions) -->
                 {#if !func.isSystem}
@@ -284,6 +312,17 @@
   on:close={() => showCreateModal = false}
 />
 
+<!-- Edit Function Modal -->
+<EditFunctionModal 
+  bind:isOpen={showEditModal}
+  bind:functionToEdit={functionToEdit}
+  on:updated={handleFunctionUpdated}
+  on:close={() => {
+    showEditModal = false;
+    functionToEdit = null;
+  }}
+/>
+
 <!-- Delete Confirmation Modal -->
 {#if showConfirmDelete}
   <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -312,4 +351,24 @@
       </div>
     </div>
   </div>
-{/if} 
+{/if}
+
+<style>
+  .function-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    padding: 1rem;
+    transition: all 0.2s;
+  }
+  
+  .function-card:hover {
+    border-color: #22D3EE;
+    box-shadow: 0 1px 3px 0 rgba(34, 211, 238, 0.1);
+  }
+  
+  .function-card.active {
+    border-color: #22D3EE;
+    background-color: rgba(34, 211, 238, 0.05);
+  }
+</style> 
