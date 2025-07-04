@@ -115,11 +115,11 @@
   <!-- Header -->
   <div class="border-b border-gray-200 p-4">
     <div class="flex items-center justify-between mb-3">
-      <h2 class="text-lg font-semibold text-gray-900">Chat History</h2>
+      <h2 class="text-lg font-semibold text-attila-dark">Chat History</h2>
       <button
         type="button"
         on:click={createNewChat}
-        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-attila-primary border border-attila-primary rounded-md hover:bg-attila-primary/90 transition-colors"
       >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -134,9 +134,9 @@
         type="text"
         bind:value={searchQuery}
         placeholder="Search chats..."
-        class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+        class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent text-sm"
       />
-      <svg class="absolute left-2 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="absolute left-2 top-2.5 h-4 w-4 text-attila-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
       </svg>
     </div>
@@ -146,7 +146,7 @@
   <div class="flex-1 overflow-y-auto p-4 space-y-3">
     {#each filteredSessions as session}
       <div 
-        class="session-card border-l-4 cursor-pointer transition-colors {$chatStore.currentSessionId === session.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}"
+        class="session-card border-l-4 cursor-pointer transition-colors {$chatStore.currentSessionId === session.id ? 'border-attila-primary bg-attila-primary/5' : 'border-gray-200 hover:border-attila-primary/30'}"
         on:click={() => switchToSession(session.id)}
         on:keydown={(e) => e.key === 'Enter' && switchToSession(session.id)}
         role="button"
@@ -160,14 +160,13 @@
                 <input
                   type="text"
                   bind:value={editingTitle}
-                  class="w-full text-sm font-medium text-gray-900 bg-transparent border-b border-blue-500 focus:outline-none"
+                  class="w-full text-sm font-medium text-attila-dark bg-transparent border-b border-attila-primary focus:outline-none"
                   on:keydown={(e) => handleKeydown(e, session.id)}
                   on:blur={() => saveTitle(session.id)}
-                  autofocus
                 />
               {:else}
                 <h3 
-                  class="text-sm font-medium text-gray-900 truncate"
+                  class="text-sm font-medium text-attila-dark truncate"
                   on:dblclick={(e) => startEditing(session.id, session.title, e)}
                 >
                   {session.title}
@@ -175,17 +174,17 @@
               {/if}
               
               <div class="flex items-center space-x-2 mt-1">
-                <span class="text-xs text-gray-500">
+                <span class="text-xs text-attila-gray">
                   {formatDateRelative(session.updated_at)}
                 </span>
                 <span class="text-xs text-gray-400">•</span>
-                <span class="text-xs text-gray-500">
+                <span class="text-xs text-attila-gray">
                   {session.message_count} messages
                 </span>
               </div>
               
               {#if session.description}
-                <p class="text-xs text-gray-600 mt-1 line-clamp-2">
+                <p class="text-xs text-attila-gray mt-1 line-clamp-2">
                   {session.description}
                 </p>
               {/if}
@@ -196,7 +195,7 @@
               <button
                 type="button"
                 on:click={(e) => startEditing(session.id, session.title, e)}
-                class="p-1 text-gray-400 hover:text-gray-600 rounded"
+                class="p-1 text-gray-400 hover:text-attila-primary rounded"
                 title="Edit title"
               >
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,8 +218,8 @@
           
           <!-- Current Session Indicator -->
           {#if $chatStore.currentSessionId === session.id}
-            <div class="flex items-center text-xs text-blue-600 font-medium">
-              <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+            <div class="flex items-center text-xs text-attila-primary font-medium">
+              <div class="w-2 h-2 bg-attila-primary rounded-full mr-2"></div>
               Active Session
             </div>
           {/if}
@@ -232,13 +231,13 @@
     {#if filteredSessions.length === 0}
       <div class="text-center py-8">
         <div class="text-gray-400 text-4xl mb-2">💬</div>
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-attila-gray">
           {searchQuery ? 'No chats found' : 'No chat history yet'}
         </p>
         {#if searchQuery}
           <button
             type="button"
-            class="text-xs text-blue-600 hover:text-blue-700 mt-2"
+            class="text-xs text-attila-primary hover:text-attila-primary/80 mt-2"
             on:click={() => searchQuery = ''}
           >
             Clear search
@@ -246,7 +245,7 @@
         {:else}
           <button
             type="button"
-            class="text-xs text-blue-600 hover:text-blue-700 mt-2"
+            class="text-xs text-attila-primary hover:text-attila-primary/80 mt-2"
             on:click={createNewChat}
           >
             Start your first chat
@@ -258,7 +257,7 @@
   
   <!-- Footer -->
   <div class="border-t border-gray-200 p-4">
-    <div class="flex items-center justify-between text-xs text-gray-500">
+    <div class="flex items-center justify-between text-xs text-attila-gray">
       <span>{filteredSessions.length} chats</span>
       <span>
         {#if $chatStore.currentSessionId}

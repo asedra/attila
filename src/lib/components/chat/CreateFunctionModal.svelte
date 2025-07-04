@@ -199,108 +199,109 @@
         
         <!-- Icon -->
         <div>
-          <label class="block text-sm font-medium text-attila-dark mb-2">
-            Icon
-          </label>
-          <div class="grid grid-cols-5 gap-2">
-            {#each iconOptions as option}
-              <label class="flex flex-col items-center p-3 border border-gray-200 rounded-md cursor-pointer hover:bg-attila-light transition-colors {formData.icon === option.value ? 'bg-attila-primary/10 border-attila-primary' : ''}">
-                <input
-                  type="radio"
-                  bind:group={formData.icon}
-                  value={option.value}
-                  class="sr-only"
-                />
-                <span class="text-2xl mb-1">{option.icon}</span>
-                <span class="text-xs text-attila-gray">{option.value}</span>
-              </label>
-            {/each}
-          </div>
+          <fieldset class="block text-sm font-medium text-attila-dark mb-2">
+            <legend class="text-sm font-medium text-attila-dark mb-2">Icon</legend>
+            <div class="grid grid-cols-5 gap-2">
+              {#each iconOptions as option}
+                <label class="flex flex-col items-center p-3 border border-gray-200 rounded-md cursor-pointer hover:bg-attila-light transition-colors {formData.icon === option.value ? 'bg-attila-primary/10 border-attila-primary' : ''}">
+                  <input
+                    type="radio"
+                    bind:group={formData.icon}
+                    value={option.value}
+                    class="sr-only"
+                    name="function-icon"
+                  />
+                  <span class="text-2xl mb-1">{option.icon}</span>
+                  <span class="text-xs text-attila-gray">{option.value}</span>
+                </label>
+              {/each}
+            </div>
+          </fieldset>
         </div>
         
         <!-- Parameters -->
         <div>
-          <label class="block text-sm font-medium text-attila-dark mb-2">
-            Parameters
-          </label>
-          
-          <!-- Existing Parameters -->
-          {#if formData.parameters.length > 0}
-            <div class="space-y-2 mb-4">
-              {#each formData.parameters as param, index}
-                <div class="flex items-center justify-between p-3 bg-attila-light rounded-md">
-                  <div class="flex-1">
-                    <div class="flex items-center space-x-2">
-                      <span class="font-medium">{param.name}</span>
-                      <span class="text-sm text-attila-gray">({param.type})</span>
-                      {#if param.required}
-                        <span class="text-xs bg-red-100 text-red-800 px-1 rounded">required</span>
+          <fieldset>
+            <legend class="block text-sm font-medium text-attila-dark mb-2">Parameters</legend>
+            
+            <!-- Existing Parameters -->
+            {#if formData.parameters.length > 0}
+              <div class="space-y-2 mb-4">
+                {#each formData.parameters as param, index}
+                  <div class="flex items-center justify-between p-3 bg-attila-light rounded-md">
+                    <div class="flex-1">
+                      <div class="flex items-center space-x-2">
+                        <span class="font-medium">{param.name}</span>
+                        <span class="text-sm text-attila-gray">({param.type})</span>
+                        {#if param.required}
+                          <span class="text-xs bg-red-100 text-red-800 px-1 rounded">required</span>
+                        {/if}
+                      </div>
+                      {#if param.description}
+                        <p class="text-sm text-attila-gray mt-1">{param.description}</p>
                       {/if}
                     </div>
-                    {#if param.description}
-                      <p class="text-sm text-attila-gray mt-1">{param.description}</p>
-                    {/if}
+                    <button
+                      type="button"
+                      on:click={() => removeParameter(index)}
+                      class="text-red-500 hover:text-red-700 transition-colors"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                      </svg>
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    on:click={() => removeParameter(index)}
-                    class="text-red-500 hover:text-red-700 transition-colors"
-                  >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                    </svg>
-                  </button>
-                </div>
-              {/each}
-            </div>
-          {/if}
-          
-          <!-- Add Parameter Form -->
-          <div class="border border-gray-200 rounded-md p-4">
-            <h4 class="text-sm font-medium text-attila-dark mb-3">Add Parameter</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-              <input
-                type="text"
-                bind:value={newParameter.name}
-                placeholder="Parameter name"
-                class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent text-sm"
-              />
-              <select
-                bind:value={newParameter.type}
-                class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent text-sm"
-              >
-                {#each parameterTypes as type}
-                  <option value={type}>{type}</option>
                 {/each}
-              </select>
-            </div>
-            <div class="mb-3">
-              <input
-                type="text"
-                bind:value={newParameter.description}
-                placeholder="Parameter description (optional)"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent text-sm"
-              />
-            </div>
-            <div class="flex items-center justify-between">
-              <label class="flex items-center">
+              </div>
+            {/if}
+            
+            <!-- Add Parameter Form -->
+            <div class="border border-gray-200 rounded-md p-4">
+              <h4 class="text-sm font-medium text-attila-dark mb-3">Add Parameter</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                 <input
-                  type="checkbox"
-                  bind:checked={newParameter.required}
-                  class="mr-2"
+                  type="text"
+                  bind:value={newParameter.name}
+                  placeholder="Parameter name"
+                  class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent text-sm"
                 />
-                <span class="text-sm text-attila-dark">Required parameter</span>
-              </label>
-              <button
-                type="button"
-                on:click={addParameter}
-                disabled={!newParameter.name.trim()}
-                class="px-3 py-1 bg-attila-primary text-white rounded-md hover:bg-attila-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
-              >
-                Add
-              </button>
+                <select
+                  bind:value={newParameter.type}
+                  class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent text-sm"
+                >
+                  {#each parameterTypes as type}
+                    <option value={type}>{type}</option>
+                  {/each}
+                </select>
+              </div>
+              <div class="mb-3">
+                <input
+                  type="text"
+                  bind:value={newParameter.description}
+                  placeholder="Parameter description (optional)"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-attila-primary focus:border-transparent text-sm"
+                />
+              </div>
+              <div class="flex items-center justify-between">
+                <label class="flex items-center">
+                  <input
+                    type="checkbox"
+                    bind:checked={newParameter.required}
+                    class="mr-2"
+                  />
+                  <span class="text-sm text-attila-dark">Required parameter</span>
+                </label>
+                <button
+                  type="button"
+                  on:click={addParameter}
+                  disabled={!newParameter.name.trim()}
+                  class="px-3 py-1 bg-attila-primary text-white rounded-md hover:bg-attila-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
+                >
+                  Add
+                </button>
+              </div>
             </div>
-          </div>
+          </fieldset>
         </div>
         
         <!-- Actions -->

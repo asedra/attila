@@ -6,12 +6,19 @@
   
   let sessionId: string;
   
-  // Get session ID from URL params and switch session when it changes
-  $: {
-    sessionId = $page.params.sessionId;
+  // Get session ID from URL params
+  $: sessionId = $page.params.sessionId;
+  
+  // Switch session only on client side
+  onMount(() => {
     if (sessionId) {
       chatActions.switchSession(sessionId);
     }
+  });
+  
+  // Also switch when sessionId changes after mount
+  $: if (typeof window !== 'undefined' && sessionId) {
+    chatActions.switchSession(sessionId);
   }
 </script>
 
