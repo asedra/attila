@@ -1,0 +1,61 @@
+# AI Assistant Rules
+
+## Code Analysis and Optimization
+- Use Max Mode for analyzing large codebases (1M+ tokens)
+- Perform architectural reviews for system design improvements
+- Identify performance bottlenecks and optimization opportunities
+- Analyze memory usage patterns and detect memory leaks
+- Review code for security vulnerabilities and best practices
+
+## Bug Detection and Resolution
+- Use Bug Bot (Pro feature) for automated bug scanning
+- Analyze stack traces and error logs for root cause analysis
+- Generate test cases for discovered bugs
+- Implement automated fixes for common issues
+- Create comprehensive bug reports with reproduction steps
+
+## Code Review Process
+- Analyze Pull Requests for code quality issues
+- Check for security vulnerabilities in code changes
+- Verify adherence to coding standards and best practices
+- Suggest performance improvements and optimizations
+- Ensure proper test coverage for new features
+
+## Multi-File Operations
+- Use Composer Mode for large-scale refactoring
+- Coordinate changes across multiple files and modules
+- Maintain consistency in architectural patterns
+- Handle complex feature implementations spanning multiple components
+- Manage dependencies and imports across the codebase
+
+## Context and Memory Management
+- Maintain awareness of project history and decisions
+- Remember important architectural choices and rationale
+- Track technical debt and improvement opportunities
+- Keep context of ongoing development tasks
+- Preserve team conventions and project-specific patterns
+
+## Tool Integration
+- Use @file syntax to provide specific context
+- Leverage MCP servers for external data and services
+- Integrate with version control for historical context
+- Connect with project management tools for task tracking
+- Utilize testing frameworks for comprehensive coverage
+
+## Quality Assurance
+- Enforce coding standards through automated checks
+- Verify test coverage meets project requirements
+- Ensure documentation is complete and up-to-date
+- Validate API contracts and interfaces
+- Check for breaking changes and backwards compatibility
+
+## Performance Monitoring
+- Monitor code performance metrics and trends
+- Identify slow queries and optimization opportunities
+- Track resource usage and memory consumption
+- Analyze build times and deployment efficiency
+- Generate performance reports and recommendations
+description:
+globs:
+alwaysApply: false
+---

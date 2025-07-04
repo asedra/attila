@@ -1,0 +1,65 @@
+{
+  "slack": {
+    "enabled": true,
+    "botToken": "${SLACK_BOT_TOKEN}",
+    "signingSecret": "${SLACK_SIGNING_SECRET}",
+    "channels": {
+      "development": "#development",
+      "alerts": "#alerts",
+      "deployments": "#deployments",
+      "code-review": "#code-review"
+    },
+    "commands": {
+      "cursor": {
+        "description": "Invoke Cursor AI agent",
+        "usage": "@Cursor [command]",
+        "examples": [
+          "@Cursor, fix this bug",
+          "@Cursor, analyze the performance issue",
+          "@Cursor, create a PR for feature X"
+        ]
+      }
+    },
+    "workflows": {
+      "backgroundAgent": {
+        "enabled": true,
+        "repository": "default",
+        "branch": "main",
+        "notifications": {
+          "onStart": true,
+          "onComplete": true,
+          "onError": true
+        }
+      },
+      "prReview": {
+        "enabled": true,
+        "autoReview": true,
+        "channels": ["#code-review"],
+        "reviewers": ["@team-lead", "@senior-dev"]
+      }
+    },
+    "permissions": {
+      "allowedUsers": ["@team-member", "@developer"],
+      "allowedChannels": ["#development", "#general"],
+      "restrictedCommands": ["deploy", "delete"],
+      "adminUsers": ["@admin", "@team-lead"]
+    },
+    "integrations": {
+      "jira": {
+        "enabled": true,
+        "linkTickets": true,
+        "updateStatus": true
+      },
+      "github": {
+        "enabled": true,
+        "prNotifications": true,
+        "deploymentStatus": true
+      },
+      "monitoring": {
+        "enabled": true,
+        "alertChannel": "#alerts",
+        "metrics": ["errors", "performance", "uptime"]
+      }
+    }
+  }
+} 

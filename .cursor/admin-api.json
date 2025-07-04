@@ -1,0 +1,105 @@
+{
+  "adminApi": {
+    "enabled": true,
+    "apiKey": "${CURSOR_ADMIN_API_KEY}",
+    "baseUrl": "https://api.cursor.com",
+    "endpoints": {
+      "teamMembers": "/teams/members",
+      "dailyUsage": "/teams/daily-usage-data",
+      "usageEvents": "/teams/usage-events",
+      "spendingReport": "/teams/spending-report"
+    },
+    "monitoring": {
+      "dailyReports": {
+        "enabled": true,
+        "time": "09:00",
+        "timezone": "UTC",
+        "recipients": ["admin@company.com"],
+        "metrics": [
+          "totalLinesAdded",
+          "totalLinesDeleted",
+          "acceptedLinesAdded",
+          "acceptedLinesDeleted",
+          "composerRequests",
+          "chatRequests",
+          "agentRequests",
+          "mostUsedModel"
+        ]
+      },
+      "alerts": {
+        "enabled": true,
+        "thresholds": {
+          "dailyRequests": 1000,
+          "weeklySpending": 500,
+          "monthlyUsage": 10000
+        },
+        "notifications": {
+          "email": ["admin@company.com"],
+          "slack": "#admin-alerts"
+        }
+      }
+    },
+    "analytics": {
+      "dashboard": {
+        "enabled": true,
+        "refreshInterval": 3600,
+        "widgets": [
+          {
+            "type": "usage-trend",
+            "title": "Daily Usage Trend",
+            "metrics": ["composerRequests", "chatRequests"],
+            "timeRange": "30d"
+          },
+          {
+            "type": "model-usage",
+            "title": "Model Usage Distribution",
+            "metrics": ["mostUsedModel"],
+            "chartType": "pie"
+          },
+          {
+            "type": "team-productivity",
+            "title": "Team Productivity",
+            "metrics": ["acceptedLinesAdded", "totalLinesAdded"],
+            "calculation": "acceptance_rate"
+          }
+        ]
+      },
+      "reports": {
+        "weekly": {
+          "enabled": true,
+          "day": "monday",
+          "time": "09:00",
+          "format": "json",
+          "include": ["usage-summary", "top-users", "model-stats"]
+        },
+        "monthly": {
+          "enabled": true,
+          "day": 1,
+          "time": "09:00",
+          "format": "csv",
+          "include": ["detailed-usage", "spending-breakdown", "team-performance"]
+        }
+      }
+    },
+    "teamManagement": {
+      "autoProvisioning": {
+        "enabled": true,
+        "defaultRole": "member",
+        "approvalRequired": true,
+        "approvers": ["admin@company.com"]
+      },
+      "quotas": {
+        "perUser": {
+          "dailyRequests": 100,
+          "weeklyAgentHours": 10,
+          "monthlySpending": 50
+        },
+        "perTeam": {
+          "dailyRequests": 1000,
+          "weeklyAgentHours": 100,
+          "monthlySpending": 500
+        }
+      }
+    }
+  }
+} 

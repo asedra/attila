@@ -1,0 +1,55 @@
+# Project Management Rules
+
+## Jira Integration
+- All API endpoints must include proper error handling
+- Create Jira tickets for bugs automatically using @jira
+- Link code changes to Jira tickets in commit messages
+- Use JQL search to find blocking issues: `@jira search project = PROJ AND status = "To Do"`
+- Update ticket status when fixing bugs
+- Add time tracking for development tasks
+
+## Confluence Documentation
+- Update Confluence pages for new features using @confluence
+- Summarize large documents before making changes
+- Create architecture decision records (ADRs)
+- Document API changes and breaking changes
+- Generate release notes from Git history
+
+## Slack Integration
+- Use @Cursor mentions in Slack for team requests
+- Post updates to #development channel for deployments
+- Create background agents for automated task execution
+- Share PR reviews and code analysis in relevant channels
+- Use Slack workflows for approval processes
+
+## Background Agent Tasks
+- Automated testing after each commit
+- Code quality checks and linting
+- Security vulnerability scanning
+- Performance monitoring and alerting
+- Automated documentation updates
+
+## Memory and Context
+- Remember architectural decisions for future reference
+- Track technical debt and improvement opportunities
+- Maintain project glossary and terminology
+- Document team conventions and best practices
+- Keep track of external dependencies and their versions
+
+## Admin API Usage
+- Monitor team usage metrics and costs
+- Track AI suggestion acceptance rates
+- Generate monthly reports on productivity
+- Set up alerts for usage thresholds
+- Analyze code generation patterns
+
+## Workflow Automation
+- Use MCP servers to bridge between tools
+- Automate repetitive tasks with background agents
+- Create custom workflows for deployment processes
+- Set up monitoring and alerting for critical systems
+- Implement automated rollback procedures
+description:
+globs:
+alwaysApply: false
+---

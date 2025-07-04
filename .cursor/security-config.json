@@ -1,0 +1,133 @@
+{
+  "security": {
+    "privacyMode": {
+      "enabled": true,
+      "level": "strict",
+      "dataRetention": {
+        "conversations": "none",
+        "codeSnippets": "none",
+        "modelPrompts": "delete_after_response"
+      }
+    },
+    "authentication": {
+      "saml": {
+        "enabled": true,
+        "identityProvider": "${SAML_IDP_URL}",
+        "entityId": "${SAML_ENTITY_ID}",
+        "certificate": "${SAML_CERTIFICATE}"
+      },
+      "scim": {
+        "enabled": true,
+        "endpoint": "${SCIM_ENDPOINT}",
+        "token": "${SCIM_TOKEN}",
+        "autoProvisioning": true
+      },
+      "oauth": {
+        "enabled": true,
+        "providers": ["github", "google", "microsoft"],
+        "permissions": {
+          "github": ["repo", "read:user"],
+          "google": ["profile", "email"],
+          "microsoft": ["profile", "email"]
+        }
+      }
+    },
+    "encryption": {
+      "atRest": {
+        "enabled": true,
+        "algorithm": "AES-256-GCM",
+        "keyRotation": "quarterly"
+      },
+      "inTransit": {
+        "enabled": true,
+        "tlsVersion": "1.3",
+        "certificateValidation": "strict"
+      },
+      "secrets": {
+        "storage": "encrypted",
+        "accessLogging": true,
+        "rotationPolicy": "90d"
+      }
+    },
+    "accessControl": {
+      "rbac": {
+        "enabled": true,
+        "roles": {
+          "admin": ["full_access"],
+          "team_lead": ["team_management", "analytics", "agent_control"],
+          "developer": ["code_assist", "chat", "basic_agents"],
+          "viewer": ["read_only"]
+        }
+      },
+      "permissions": {
+        "codebaseAccess": "role_based",
+        "mcpServers": "admin_approved",
+        "backgroundAgents": "team_lead_approved",
+        "adminApi": "admin_only"
+      }
+    },
+    "auditLogging": {
+      "enabled": true,
+      "retention": "2y",
+      "events": [
+        "login",
+        "logout",
+        "code_generation",
+        "agent_execution",
+        "mcp_usage",
+        "admin_actions"
+      ],
+      "destinations": {
+        "siem": {
+          "enabled": true,
+          "endpoint": "${SIEM_ENDPOINT}",
+          "format": "json"
+        },
+        "localFile": {
+          "enabled": true,
+          "path": "/var/log/cursor/audit.log",
+          "rotation": "daily"
+        }
+      }
+    },
+    "compliance": {
+      "gdpr": {
+        "enabled": true,
+        "dataSubjectRights": true,
+        "consentManagement": true,
+        "dataPortability": true
+      },
+      "sox": {
+        "enabled": true,
+        "changeTracking": true,
+        "approvalWorkflows": true
+      },
+      "hipaa": {
+        "enabled": false,
+        "businessAssociateAgreement": false
+      }
+    },
+    "threatProtection": {
+      "promptInjection": {
+        "enabled": true,
+        "detection": "ai_based",
+        "action": "block",
+        "alerting": true
+      },
+      "dataLeakage": {
+        "enabled": true,
+        "patterns": ["api_keys", "passwords", "pii"],
+        "action": "redact",
+        "alerting": true
+      },
+      "rateLimiting": {
+        "enabled": true,
+        "limits": {
+          "perUser": "100/hour",
+          "perTeam": "1000/hour",
+          "perAgent": "50/hour"
+        }
+      }
+    }
+  }
+} 

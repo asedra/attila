@@ -1,0 +1,41 @@
+{
+  "install": "npm ci",
+  "terminals": [
+    { "name": "Run Tests", "command": "npm test -- --watchAll=false" },
+    { "name": "Dev Server", "command": "npm run start" },
+    { "name": "Lint", "command": "npm run lint" },
+    { "name": "Type Check", "command": "npm run type-check" },
+    { "name": "Build", "command": "npm run build" },
+    { "name": "E2E Tests", "command": "npm run test:e2e" }
+  ],
+  "environment": {
+    "NODE_ENV": "development",
+    "DEBUG": "true",
+    "CI": "true"
+  },
+  "snapshot": {
+    "enabled": false,
+    "dockerfile": "Dockerfile.dev"
+  },
+  "git": {
+    "defaultBranch": "main",
+    "branchPrefix": "cursor-agent-",
+    "autoCommit": true,
+    "prTitle": "🤖 Cursor Agent: {description}"
+  },
+  "monitoring": {
+    "healthCheck": "curl -f http://localhost:3000/health || exit 1",
+    "logLevel": "info",
+    "metrics": {
+      "enabled": true,
+      "endpoint": "/metrics"
+    }
+  },
+  "notifications": {
+    "slack": {
+      "enabled": true,
+      "webhook": "${SLACK_WEBHOOK_URL}",
+      "channel": "#development"
+    }
+  }
+} 

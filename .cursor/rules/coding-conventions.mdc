@@ -1,0 +1,62 @@
+# Coding Conventions
+
+## Code Style
+- Use TypeScript for all new JavaScript code
+- Follow ESLint and Prettier configurations
+- Use meaningful variable and function names
+- Add JSDoc comments for all public functions
+- Prefer async/await over Promise.then()
+- Use structured logging with context information
+
+## Architecture
+- Use SvelteKit for frontend development with TypeScript
+- Use Tailwind CSS for styling
+- Use absolute imports with `$lib/...` path
+- Follow component-based architecture
+- Implement proper error boundaries
+
+## Backend
+- Use Python 3.11+ with FastAPI
+- Follow Black + Ruff formatting (PEP8)
+- Prefer async endpoints
+- Use Pydantic for data validation
+- Use SQLAlchemy for database operations
+- Implement proper exception handling
+
+## Testing
+- Use Playwright or Cypress for E2E tests
+- Write unit tests for all business logic
+- Maintain test coverage above 80%
+- Use meaningful test descriptions
+- Mock external dependencies
+
+## Security
+- Use environment variables for all secrets
+- Never hard-code API keys or passwords
+- Validate all user inputs
+- Use HTTPS in production
+- Implement proper authentication and authorization
+
+## Git
+- Use conventional commit messages
+- Create feature branches for new development
+- Require PR reviews before merging
+- Keep commits atomic and focused
+- Use meaningful branch names
+
+## Performance
+- Implement caching where appropriate
+- Use connection pooling for database operations
+- Optimize queries to avoid N+1 problems
+- Monitor and log performance metrics
+- Use lazy loading for heavy resources
+
+## Memory Management
+- Always remember important architectural decisions
+- Document why specific patterns were chosen
+- Keep track of performance optimizations
+- Remember user preferences and project context
+description:
+globs:
+alwaysApply: false
+---
